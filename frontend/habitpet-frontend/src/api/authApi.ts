@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const API_URL = 'https://localhost:7059/api';
+import apiClient from './apiClient';
 
 export interface LoginRequest {
   email: string;
@@ -33,19 +31,19 @@ export interface ForgotPasswordRequest {
 }
 
 export const login = async (data: LoginRequest): Promise<AuthResponse> => {
-  const response = await axios.post(`${API_URL}/Auth/login`, data);
+  const response = await apiClient.post<AuthResponse>('/Auth/login', data);
   return response.data;
 };
 
 export const register = async (data: RegisterRequest): Promise<AuthResponse> => {
-  const response = await axios.post(`${API_URL}/Auth/register`, data);
+  const response = await apiClient.post<AuthResponse>('/Auth/register', data);
   return response.data;
 };
 
 export const resetPassword = async (data: ResetPasswordRequest): Promise<void> => {
-  await axios.post(`${API_URL}/Auth/reset-password`, data);
+  await apiClient.post('/Auth/reset-password', data);
 };
 
 export const forgotPassword = async (data: ForgotPasswordRequest): Promise<void> => {
-  await axios.post(`${API_URL}/Auth/forgot-password`, data);
+  await apiClient.post('/Auth/forgot-password', data);
 };
