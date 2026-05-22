@@ -8,6 +8,10 @@ import DashboardPage from './pages/Dashboard/DashboardPage';
 import HabitsPage from './pages/Habits/HabitsPage';
 import PetPage from './pages/Pet/PetPage';
 import AchievementsPage from './pages/Achievements/AchievementsPage';
+import ProfilePage from './pages/Profile/ProfilePage';
+import SettingsPage from './pages/Settings/SettingsPage';
+import PrivateRoute from './components/common/PrivateRoute';
+import MainLayout from './components/layout/MainLayout';
 
 function App() {
   return (
@@ -20,10 +24,12 @@ function App() {
         <Route path="/reset-password/sent" element={<ResetPasswordSentPage />} />
         <Route path="/register" element={<Navigate to="/register/stage1" replace />} />
         <Route path="/register/:stage" element={<RegisterPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/habits" element={<HabitsPage />} />
-        <Route path="/pet" element={<PetPage />} />
-        <Route path="/achievements" element={<AchievementsPage />} />
+        <Route path="/dashboard" element={<PrivateRoute><MainLayout><DashboardPage /></MainLayout></PrivateRoute>} />
+        <Route path="/habits" element={<PrivateRoute><MainLayout><HabitsPage /></MainLayout></PrivateRoute>} />
+        <Route path="/pet" element={<PrivateRoute><MainLayout><PetPage /></MainLayout></PrivateRoute>} />
+        <Route path="/achievements" element={<PrivateRoute><MainLayout><AchievementsPage /></MainLayout></PrivateRoute>} />
+        <Route path="/profile" element={<PrivateRoute><MainLayout><ProfilePage /></MainLayout></PrivateRoute>} />
+        <Route path="/settings" element={<PrivateRoute><MainLayout><SettingsPage /></MainLayout></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   );

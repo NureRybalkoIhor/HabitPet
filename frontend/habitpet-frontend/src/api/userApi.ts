@@ -1,11 +1,21 @@
 import apiClient from './apiClient';
 
+export interface UserStats {
+  currentXp: number;
+  totalXpEarned: number;
+  currentLevel: number;
+  xpToNextLevel: number;
+  totalHabitsDone: number;
+  totalDaysActive: number;
+}
+
 export interface UserProfile {
   userId: number;
   fullName: string;
   username: string;
   email: string;
   avatarUrl?: string;
+  Stats?: UserStats;
 }
 
 export const getUser = async (userId: number): Promise<UserProfile> => {
