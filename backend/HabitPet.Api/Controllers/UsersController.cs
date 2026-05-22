@@ -1,4 +1,4 @@
-﻿using HabitPet.Application.Interfaces;
+using HabitPet.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HabitPet.Api.Controllers
@@ -28,7 +28,16 @@ namespace HabitPet.Api.Controllers
                 user.FullName,
                 user.Username,
                 user.Email,
-                user.AvatarUrl
+                user.AvatarUrl,
+                Stats = user.Stats != null ? new
+                {
+                    user.Stats.CurrentXp,
+                    user.Stats.TotalXpEarned,
+                    user.Stats.CurrentLevel,
+                    user.Stats.XpToNextLevel,
+                    user.Stats.TotalHabitsDone,
+                    user.Stats.TotalDaysActive
+                } : null
             });
         }
 
