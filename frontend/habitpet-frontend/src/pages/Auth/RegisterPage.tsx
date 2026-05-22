@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } fr
 import { Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { register } from '../../api/authApi';
+import { uploadAvatar } from '../../api/userApi';
 import { useAuth } from '../../store/AuthContext';
 import SideToast from '../../components/SideToast';
 import AuthBackButton from '../../components/auth/AuthBackButton';
@@ -34,6 +35,7 @@ const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [avatarPreview, setAvatarPreview] = useState('');
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [account, setAccount] = useState<AccountValidationData>({
     username: '',
     email: '',
@@ -129,6 +131,15 @@ const RegisterPage = () => {
       });
 
       setAuth(response.token, response.userId, response.username);
+
+      if (avatarFile) {
+        try {
+          await uploadAvatar(response.userId, avatarFile);
+        } catch {
+          // аватар не критичний — ігноруємо помилку
+        }
+      }
+
       navigate('/dashboard');
     } catch {
       setSubmitError('Registration failed. Please try again.');
@@ -151,6 +162,7 @@ const RegisterPage = () => {
     const file = event.target.files?.[0];
 
     if (file) {
+      setAvatarFile(file);
       setAvatarPreview(URL.createObjectURL(file));
     }
   };

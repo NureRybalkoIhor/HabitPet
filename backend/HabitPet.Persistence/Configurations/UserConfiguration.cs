@@ -21,7 +21,8 @@ namespace HabitPet.Persistence.Configurations
             builder.Property(u => u.Username).IsRequired().HasMaxLength(50);
             builder.HasIndex(u => u.Username).IsUnique();
             builder.Property(u => u.PasswordHash).IsRequired();
-            builder.Property(u => u.Sex).HasMaxLength(10);
+            builder.Property(u => u.Sex).HasMaxLength(20);
+            builder.Property(u => u.AvatarUrl).HasMaxLength(300);
 
             builder.HasOne(u => u.Stats)
                 .WithOne(s => s.User)

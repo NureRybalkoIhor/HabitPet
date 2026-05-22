@@ -17,6 +17,7 @@ namespace HabitPet.Domain.Entities
         public string PasswordHash { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime LastLoginAt { get; set; }
+        public string? AvatarUrl { get; set; }
 
         public UserStats Stats { get; set; } = null!;
         public Pet Pet { get; set; } = null!;
