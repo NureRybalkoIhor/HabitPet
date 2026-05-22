@@ -1,0 +1,6 @@
+@HabitPet.Api_HostAddress = http://localhost:5291
+
+GET {{HabitPet.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

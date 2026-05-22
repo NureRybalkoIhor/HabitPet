@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HabitPet.Api", "HabitPet.Api\HabitPet.Api.csproj", "{C89D0B1F-61AB-4AA0-B0DE-8EF7D426B15D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HabitPet.Domain", "HabitPet.Domain\HabitPet.Domain.csproj", "{FE5DD4DD-9CE6-434B-B7EB-BC8D642E4739}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HabitPet.Application", "HabitPet.Application\HabitPet.Application.csproj", "{7C5E3E73-4528-4D30-A813-97298863EB33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HabitPet.Identity", "HabitPet.Identity\HabitPet.Identity.csproj", "{FD6BE895-C34A-4711-9403-2FF828D2029F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HabitPet.Persistence", "HabitPet.Persistence\HabitPet.Persistence.csproj", "{5E80F20F-B65F-4BD8-8B83-DD985F910BC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HabitPet.Infrastructure", "HabitPet.Infrastructure\HabitPet.Infrastructure.csproj", "{3C8CB97F-666A-4277-AB46-75BC19CA5490}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HabitPet.Tests", "HabitPet.Tests\HabitPet.Tests.csproj", "{C131C368-4137-468B-AFC5-EA405B4639D2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C89D0B1F-61AB-4AA0-B0DE-8EF7D426B15D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C89D0B1F-61AB-4AA0-B0DE-8EF7D426B15D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C89D0B1F-61AB-4AA0-B0DE-8EF7D426B15D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C89D0B1F-61AB-4AA0-B0DE-8EF7D426B15D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE5DD4DD-9CE6-434B-B7EB-BC8D642E4739}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE5DD4DD-9CE6-434B-B7EB-BC8D642E4739}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE5DD4DD-9CE6-434B-B7EB-BC8D642E4739}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE5DD4DD-9CE6-434B-B7EB-BC8D642E4739}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C5E3E73-4528-4D30-A813-97298863EB33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C5E3E73-4528-4D30-A813-97298863EB33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C5E3E73-4528-4D30-A813-97298863EB33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C5E3E73-4528-4D30-A813-97298863EB33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD6BE895-C34A-4711-9403-2FF828D2029F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD6BE895-C34A-4711-9403-2FF828D2029F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD6BE895-C34A-4711-9403-2FF828D2029F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD6BE895-C34A-4711-9403-2FF828D2029F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E80F20F-B65F-4BD8-8B83-DD985F910BC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E80F20F-B65F-4BD8-8B83-DD985F910BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E80F20F-B65F-4BD8-8B83-DD985F910BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E80F20F-B65F-4BD8-8B83-DD985F910BC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C8CB97F-666A-4277-AB46-75BC19CA5490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C8CB97F-666A-4277-AB46-75BC19CA5490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C8CB97F-666A-4277-AB46-75BC19CA5490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C8CB97F-666A-4277-AB46-75BC19CA5490}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C131C368-4137-468B-AFC5-EA405B4639D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C131C368-4137-468B-AFC5-EA405B4639D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C131C368-4137-468B-AFC5-EA405B4639D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C131C368-4137-468B-AFC5-EA405B4639D2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {086BEC48-D5B6-4FC6-8C65-9ADC4C89A4EB}
+	EndGlobalSection
+EndGlobal

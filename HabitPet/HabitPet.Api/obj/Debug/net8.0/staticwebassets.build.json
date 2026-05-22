@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "2pMYpOAR17yzgdk99nl8uk1VkF+xaqNJ0BqBBD/5Yh8=",
+  "Source": "HabitPet.Api",
+  "BasePath": "_content/HabitPet.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

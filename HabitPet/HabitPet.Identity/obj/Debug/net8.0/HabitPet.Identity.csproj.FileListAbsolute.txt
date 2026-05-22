@@ -1,0 +1,17 @@
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\bin\Debug\net8.0\HabitPet.Identity.deps.json
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\bin\Debug\net8.0\HabitPet.Identity.dll
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\bin\Debug\net8.0\HabitPet.Identity.pdb
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\bin\Debug\net8.0\HabitPet.Application.dll
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\bin\Debug\net8.0\HabitPet.Domain.dll
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\bin\Debug\net8.0\HabitPet.Application.pdb
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\bin\Debug\net8.0\HabitPet.Domain.pdb
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\obj\Debug\net8.0\HabitPet.Identity.csproj.AssemblyReference.cache
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\obj\Debug\net8.0\HabitPet.Identity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\obj\Debug\net8.0\HabitPet.Identity.AssemblyInfoInputs.cache
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\obj\Debug\net8.0\HabitPet.Identity.AssemblyInfo.cs
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\obj\Debug\net8.0\HabitPet.Identity.csproj.CoreCompileInputs.cache
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\obj\Debug\net8.0\HabitPet.E58F0189.Up2Date
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\obj\Debug\net8.0\HabitPet.Identity.dll
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\obj\Debug\net8.0\refint\HabitPet.Identity.dll
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\obj\Debug\net8.0\HabitPet.Identity.pdb
+C:\Users\Ihor\HabitPet\HabitPet\HabitPet.Identity\obj\Debug\net8.0\ref\HabitPet.Identity.dll
