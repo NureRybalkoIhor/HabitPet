@@ -1,6 +1,8 @@
-﻿using HabitPet.Identity.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using HabitPet.Application.Interfaces;
+using HabitPet.Identity.Services;
+using HabitPet.Infrastructure.Services;
 using HabitPet.Identity.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HabitPet.Api.Controllers
 {
@@ -9,10 +11,14 @@ namespace HabitPet.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
+        private readonly OtpService _otpService;
+        private readonly IEmailService _emailService;
 
-        public AuthController(AuthService authService)
+        public AuthController(AuthService authService, OtpService otpService, IEmailService emailService)
         {
             _authService = authService;
+            _otpService = otpService;
+            _emailService = emailService;
         }
 
         [HttpPost("register")]
@@ -31,6 +37,22 @@ namespace HabitPet.Api.Controllers
             if (result == null)
                 return Unauthorized("Невірний email або пароль.");
             return Ok(result);
+        }
+
+        [HttpPost("send-otp")]
+        public async Task<IActionResult> SendOtp([FromBody] SendOtpRequest request)
+        {
+            var code = _otpService.GenerateAndStore(request.Email);
+            await _emailService.SendOtpAsync(request.Email, code);
+            return Ok();
+        }
+
+        [HttpPost("verify-otp")]
+        public IActionResult VerifyOtp([FromBody] VerifyOtpRequest request)
+        {
+            var isValid = _otpService.Verify(request.Email, request.Code);
+            if (!isValid) return BadRequest("Invalid or expired code.");
+            return Ok();
         }
     }
 }

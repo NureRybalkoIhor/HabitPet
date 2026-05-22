@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { register } from '../../api/authApi';
+import { register, sendOtp, verifyOtp } from '../../api/authApi';
 import { uploadAvatar } from '../../api/userApi';
 import { useAuth } from '../../store/AuthContext';
 import SideToast from '../../components/SideToast';
@@ -98,14 +98,19 @@ const RegisterPage = () => {
     }
   };
 
-  const handleProfileSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleProfileSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const errors = validateProfileStep(profile);
     setProfileErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      setOtp(['', '', '', '']);
-      navigate('/register/otp');
+      try {
+        await sendOtp(account.email.trim());
+        setOtp(['', '', '', '']);
+        navigate('/register/otp');
+      } catch {
+        setSubmitError('Failed to send OTP. Please try again.');
+      }
     }
   };
 
@@ -121,6 +126,8 @@ const RegisterPage = () => {
     setIsLoading(true);
 
     try {
+      await verifyOtp(account.email.trim(), code);
+
       const response = await register({
         fullName: `${profile.firstName.trim()} ${profile.lastName.trim()}`,
         email: account.email.trim(),

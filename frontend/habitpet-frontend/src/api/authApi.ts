@@ -47,3 +47,11 @@ export const resetPassword = async (data: ResetPasswordRequest): Promise<void> =
 export const forgotPassword = async (data: ForgotPasswordRequest): Promise<void> => {
   await apiClient.post('/Auth/forgot-password', data);
 };
+
+export const sendOtp = async (email: string): Promise<void> => {
+  await apiClient.post('/Auth/send-otp', { email });
+};
+
+export const verifyOtp = async (email: string, code: string): Promise<void> => {
+  await apiClient.post('/Auth/verify-otp', { email, code });
+};

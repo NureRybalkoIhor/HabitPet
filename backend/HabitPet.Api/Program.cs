@@ -1,5 +1,6 @@
 using HabitPet.Application.Interfaces;
 using HabitPet.Application.Services;
+using HabitPet.Infrastructure.Services;
 using HabitPet.Persistence.Context;
 using HabitPet.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,9 @@ builder.Services.AddScoped<PetService>();
 builder.Services.AddScoped<AchievementService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<OtpService>();
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
