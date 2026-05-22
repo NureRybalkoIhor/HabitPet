@@ -1,0 +1,15 @@
+{
+  "short_name": "HabitPet",
+  "name": "HabitPet - Gamify Your Habits",
+  "icons": [
+    {
+      "src": "Logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ff8624",
+  "background_color": "#ffffff"
+}
