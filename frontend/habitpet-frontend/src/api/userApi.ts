@@ -15,7 +15,7 @@ export interface UserProfile {
   username: string;
   email: string;
   avatarUrl?: string;
-  Stats?: UserStats;
+  stats?: UserStats;
 }
 
 export const getUser = async (userId: number): Promise<UserProfile> => {

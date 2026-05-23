@@ -24,8 +24,8 @@ interface HabitCardProps {
   todayStr: string;
   actionLoading: string | null;
   onComplete: (habitId: number, title: string) => void;
-  onOpenEdit: (habit: UserHabit) => void;
-  onDelete: (habitId: number) => void;
+  onOpenEdit?: (habit: UserHabit) => void;
+  onDelete?: (habitId: number) => void;
   onOpenDetails: (habit: UserHabit) => void;
   onToggleActive?: (habit: UserHabit) => void;
 }
@@ -215,19 +215,23 @@ const HabitCard = ({
           </IconButton>
         )}
 
-        <IconButton
-          onClick={() => onOpenEdit(habit)}
-          sx={{ color: '#4A6070', '&:hover': { color: '#ff8624', bgcolor: '#fff5ec' } }}
-        >
-          <EditIcon sx={{ fontSize: 20 }} />
-        </IconButton>
-        <IconButton
-          disabled={actionLoading === `delete-${habit.userHabitId}`}
-          onClick={() => onDelete(habit.userHabitId)}
-          sx={{ color: '#4A6070', '&:hover': { color: '#d71920', bgcolor: '#fff0f0' } }}
-        >
-          <DeleteIcon sx={{ fontSize: 20 }} />
-        </IconButton>
+        {onOpenEdit && (
+          <IconButton
+            onClick={() => onOpenEdit(habit)}
+            sx={{ color: '#4A6070', '&:hover': { color: '#ff8624', bgcolor: '#fff5ec' } }}
+          >
+            <EditIcon sx={{ fontSize: 20 }} />
+          </IconButton>
+        )}
+        {onDelete && (
+          <IconButton
+            disabled={actionLoading === `delete-${habit.userHabitId}`}
+            onClick={() => onDelete(habit.userHabitId)}
+            sx={{ color: '#4A6070', '&:hover': { color: '#d71920', bgcolor: '#fff0f0' } }}
+          >
+            <DeleteIcon sx={{ fontSize: 20 }} />
+          </IconButton>
+        )}
       </Box>
     </Box>
   );

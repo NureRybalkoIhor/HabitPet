@@ -16,17 +16,8 @@ import {
 } from '@mui/material';
 import { CloseOutlined as CloseIcon } from '@mui/icons-material';
 import { UserHabit, HabitTemplate } from '../../../api/habitsApi';
-import { calculateXp } from '../../../utils/xpCalculator';
+import { calculateXp, countBits } from '../../../utils/xpCalculator';
 
-const countBits = (val: number): number => {
-  let count = 0;
-  let temp = val;
-  while (temp > 0) {
-    count += temp & 1;
-    temp >>= 1;
-  }
-  return count;
-};
 
 interface HabitDialogProps {
   open: boolean;
@@ -148,10 +139,10 @@ const HabitDialog = ({
   const validate = () => {
     const newErrors: typeof errors = {};
     if (!title.trim()) {
-      newErrors.title = 'Ritual title is required';
+      newErrors.title = 'Habit title is required';
     }
     if (!description.trim()) {
-      newErrors.description = 'Ritual intent or description is required';
+      newErrors.description = 'Habit intent or description is required';
     }
     if (dayMask === 0) {
       newErrors.days = 'Select at least one scheduled day';
@@ -274,7 +265,7 @@ const HabitDialog = ({
           backgroundColor: '#fcfbfa',
         }}
       >
-        <span>{mode === 'create' ? 'ESTABLISH NEW RITUAL' : 'ADJUST RITUAL'}</span>
+        <span>{mode === 'create' ? 'ESTABLISH NEW HABIT' : 'ADJUST HABIT'}</span>
         <IconButton onClick={onClose} sx={{ color: '#4A6070' }}>
           <CloseIcon />
         </IconButton>
@@ -297,7 +288,7 @@ const HabitDialog = ({
       >
         <Box sx={{ pt: 2 }}>
           <TextFieldComponent
-            label="Ritual Title"
+            label="Habit Title"
             variant="outlined"
             fullWidth
             value={title}
@@ -355,7 +346,7 @@ const HabitDialog = ({
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 3 }}>
           <Box>
             <Typography sx={{ fontSize: '11px', fontWeight: 800, color: '#888', mb: 1.5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              RITUAL TYPE
+              HABIT TYPE
             </Typography>
             <Box sx={{ display: 'flex', gap: 0.5, bgcolor: '#F3EFE9', p: '3px', borderRadius: '8px', width: 'fit-content' }}>
               <Button
@@ -398,7 +389,7 @@ const HabitDialog = ({
           {mode === 'edit' && (
             <Box>
               <Typography sx={{ fontSize: '11px', fontWeight: 800, color: '#888', mb: 1.5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                RITUAL STATUS
+                HABIT STATUS
               </Typography>
               <Box sx={{ display: 'flex', gap: 0.5, bgcolor: '#F3EFE9', p: '3px', borderRadius: '8px', width: 'fit-content' }}>
                 <Button

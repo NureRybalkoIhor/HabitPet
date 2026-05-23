@@ -23,12 +23,8 @@ import HabitDialog from './components/HabitDialog';
 import PresetTemplates from './components/PresetTemplates';
 import HabitDetailsDialog from './components/HabitDetailsDialog';
 import HabitCompleteDialog from './components/HabitCompleteDialog';
+import { getLocalDateString } from '../../utils/habitHelpers';
 
-const getLocalDateString = (d: Date = new Date()) => {
-  const offset = d.getTimezoneOffset();
-  const localDate = new Date(d.getTime() - offset * 60 * 1000);
-  return localDate.toISOString().split('T')[0];
-};
 
 const HabitsPage = () => {
   const { userId } = useAuth();
@@ -64,7 +60,7 @@ const HabitsPage = () => {
       setTemplates(tData);
     } catch (error) {
       console.error(error);
-      setToast({ message: 'Failed to synchronize ritual lists.', type: 'error' });
+      setToast({ message: 'Failed to synchronize habit lists.', type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -86,10 +82,10 @@ const HabitsPage = () => {
     setActionLoading(`complete-${completeHabitId}`);
     try {
       await completeHabit(completeHabitId, userId, note);
-      setToast({ message: `Ritual "${completeHabitTitle}" completed. Wisdom grows.`, type: 'success' });
+      setToast({ message: `Habit "${completeHabitTitle}" completed. Wisdom grows.`, type: 'success' });
       await fetchData();
     } catch (error) {
-      setToast({ message: 'Failed to complete ritual.', type: 'error' });
+      setToast({ message: 'Failed to complete habit.', type: 'error' });
     } finally {
       setActionLoading(null);
       setCompleteHabitId(null);
@@ -101,10 +97,10 @@ const HabitsPage = () => {
     setActionLoading(`delete-${habitId}`);
     try {
       await deleteHabit(habitId);
-      setToast({ message: 'Ritual dissolved.', type: 'success' });
+      setToast({ message: 'Habit dissolved.', type: 'success' });
       await fetchData();
     } catch (error) {
-      setToast({ message: 'Failed to remove ritual.', type: 'error' });
+      setToast({ message: 'Failed to remove habit.', type: 'error' });
     } finally {
       setActionLoading(null);
     }
@@ -129,13 +125,13 @@ const HabitsPage = () => {
       await updateHabit(habit.userHabitId, dto);
       setToast({
         message: habit.isActive
-          ? `Ritual "${habit.title}" paused.`
-          : `Ritual "${habit.title}" resumed.`,
+          ? `Habit "${habit.title}" paused.`
+          : `Habit "${habit.title}" resumed.`,
         type: 'success',
       });
       await fetchData();
     } catch (error) {
-      setToast({ message: 'Failed to adjust ritual status.', type: 'error' });
+      setToast({ message: 'Failed to adjust habit status.', type: 'error' });
     } finally {
       setActionLoading(null);
     }
@@ -189,7 +185,7 @@ const HabitsPage = () => {
           userId,
         };
         await createHabit(dto);
-        setToast({ message: 'Custom ritual established.', type: 'success' });
+        setToast({ message: 'Custom habit established.', type: 'success' });
       } else {
         if (!selectedHabit) return;
         const dto: UpdateUserHabitDto = {
@@ -205,12 +201,12 @@ const HabitsPage = () => {
           reminderTime: data.reminderTime ? `${data.reminderTime}:00` : undefined,
         };
         await updateHabit(selectedHabit.userHabitId, dto);
-        setToast({ message: 'Ritual properties adjusted.', type: 'success' });
+        setToast({ message: 'Habit properties adjusted.', type: 'success' });
       }
       setDialogOpen(false);
       await fetchData();
     } catch (error) {
-      setToast({ message: 'Failed to persist ritual changes.', type: 'error' });
+      setToast({ message: 'Failed to persist habit changes.', type: 'error' });
     }
   };
 
@@ -234,7 +230,7 @@ const HabitsPage = () => {
       setToast({ message: `Adopted "${template.title}" template.`, type: 'success' });
       await fetchData();
     } catch (error) {
-      setToast({ message: 'Failed to add template ritual.', type: 'error' });
+      setToast({ message: 'Failed to add template habit.', type: 'error' });
     } finally {
       setActionLoading(null);
     }
@@ -258,6 +254,7 @@ const HabitsPage = () => {
   const todayStr = getLocalDateString();
 
   const filteredHabits = habits.filter((h) => {
+    if (h.isMastered) return false;
     if (filterType === 'positive') return h.isPositive;
     if (filterType === 'negative') return !h.isPositive;
     return true;
@@ -323,7 +320,7 @@ const HabitsPage = () => {
             mt: 0.5,
           }}
         >
-          RITUALS & DAILY PRACTICES
+          HABITS & DAILY PRACTICES
         </Typography>
       </Box>
 
@@ -352,7 +349,7 @@ const HabitsPage = () => {
             }}
           >
             <Typography sx={{ fontWeight: 800, fontSize: '13px', letterSpacing: '0.15em', color: '#4A6070' }}>
-              MY ACTIVE RITUALS
+              MY ACTIVE HABITS
             </Typography>
 
             <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1.5 }}>
@@ -444,7 +441,7 @@ const HabitsPage = () => {
             >
               <PresetIcon sx={{ color: '#d0cac0', fontSize: 32, mb: 1.5 }} />
               <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#4A6070' }}>
-                No active rituals found. Adopt presets or create custom ones.
+                No active habits found. Adopt presets or create custom ones.
               </Typography>
             </Box>
           ) : (
@@ -462,6 +459,77 @@ const HabitsPage = () => {
                   onToggleActive={handleToggleActive}
                 />
               ))}
+            </Box>
+          )}
+
+          {habits.some((h) => h.isMastered) && (
+            <Box
+              sx={{
+                mt: 4,
+                p: 3,
+                borderRadius: '16px',
+                border: '1px solid #e6e3dd',
+                bgcolor: '#fffbf5',
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 800,
+                  fontSize: '13px',
+                  letterSpacing: '0.15em',
+                  color: '#b78103',
+                  mb: 3,
+                  pb: 1,
+                  borderBottom: '1px solid #f9ebd2',
+                }}
+              >
+                MASTERED PRACTICES ARCHIVE
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                {habits
+                  .filter((h) => h.isMastered)
+                  .map((habit) => (
+                    <Box
+                      key={habit.userHabitId}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        p: 2.5,
+                        borderRadius: '12px',
+                        border: '1px solid #e6e3dd',
+                        bgcolor: '#ffffff',
+                      }}
+                    >
+                      <Box sx={{ minWidth: 0, flex: 1 }}>
+                        <Typography sx={{ fontWeight: 800, fontSize: '15px', color: '#111' }}>
+                          {habit.title}
+                        </Typography>
+                        <Typography sx={{ fontSize: '13px', color: '#4A6070', mt: 0.5 }}>
+                          {habit.description}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 1,
+                          bgcolor: '#fff9e6',
+                          border: '1px solid #ffe89e',
+                          px: 2,
+                          py: 0.7,
+                          borderRadius: '20px',
+                          color: '#b78103',
+                          fontWeight: 800,
+                          fontSize: '11px',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
+                        MASTERED
+                      </Box>
+                    </Box>
+                  ))}
+              </Box>
             </Box>
           )}
         </Box>
@@ -483,11 +551,17 @@ const HabitsPage = () => {
         onSubmit={handleDialogSubmit}
       />
 
-      <HabitDetailsDialog
-        open={detailsDialogOpen}
-        onClose={() => setDetailsDialogOpen(false)}
-        habit={detailsSelectedHabit}
-      />
+      {detailsSelectedHabit && (
+        <HabitDetailsDialog
+          open={detailsDialogOpen}
+          onClose={() => {
+            setDetailsDialogOpen(false);
+            setDetailsSelectedHabit(null);
+          }}
+          habit={detailsSelectedHabit}
+          onMasterSuccess={fetchData}
+        />
+      )}
 
       <HabitCompleteDialog
         open={completeDialogOpen}

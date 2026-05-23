@@ -70,7 +70,7 @@ const HabitCompleteDialog = ({ open, onClose, onConfirm, habitTitle }: HabitComp
           backgroundColor: '#fcfbfa',
         }}
       >
-        <span>COMPLETE RITUAL</span>
+        <span>COMPLETE HABIT</span>
         <IconButton onClick={onClose} sx={{ color: '#4A6070', p: 0.5 }}>
           <CloseIcon sx={{ fontSize: 20 }} />
         </IconButton>
@@ -79,7 +79,7 @@ const HabitCompleteDialog = ({ open, onClose, onConfirm, habitTitle }: HabitComp
       <DialogContent sx={{ px: 3, pb: 3, pt: '24px !important', display: 'flex', flexDirection: 'column', gap: 2.5 }}>
         <Box>
           <Typography sx={{ fontSize: '12px', fontWeight: 800, color: '#888', mb: 0.5, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            RITUAL TITLE
+            HABIT TITLE
           </Typography>
           <Typography sx={{ fontSize: '16px', fontWeight: 800, color: '#111' }}>
             {habitTitle}

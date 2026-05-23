@@ -1,4 +1,4 @@
-const countBits = (val: number): number => {
+export const countBits = (val: number): number => {
   let count = 0;
   let temp = val;
   while (temp > 0) {

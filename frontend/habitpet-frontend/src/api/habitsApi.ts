@@ -22,6 +22,7 @@ export interface UserHabit {
   description: string;
   isPositive: boolean;
   isActive: boolean;
+  isMastered: boolean;
   difficulty: number;
   priority: number;
   dayMask: number;
@@ -72,6 +73,7 @@ export interface UpdateUserHabitDto {
   description: string;
   isPositive: boolean;
   isActive: boolean;
+  isMastered?: boolean;
   difficulty: number;
   priority: number;
   dayMask: number;
@@ -108,5 +110,9 @@ export const completeHabit = async (userHabitId: number, userId: number, note?: 
     ? `/Habits/${userHabitId}/complete/${userId}?note=${encodeURIComponent(note)}`
     : `/Habits/${userHabitId}/complete/${userId}`;
   await apiClient.post(url);
+};
+
+export const masterHabit = async (userHabitId: number, userId: number): Promise<void> => {
+  await apiClient.post(`/Habits/${userHabitId}/master/${userId}`);
 };
 

@@ -84,7 +84,7 @@ const UserStatsCard = ({
           </Box>
           <Box>
             <Typography sx={{ fontSize: '11px', fontWeight: 700, color: '#4A6070', letterSpacing: '0.05em' }}>
-              RITUALS DONE
+              TOTAL HABITS DONE
             </Typography>
             <Typography variant="h6" sx={{ fontWeight: 800, mt: 0.5 }}>
               {totalHabitsDone}
@@ -92,7 +92,7 @@ const UserStatsCard = ({
           </Box>
           <Box>
             <Typography sx={{ fontSize: '11px', fontWeight: 700, color: '#4A6070', letterSpacing: '0.05em' }}>
-              DAYS ACTIVE
+              TOTAL DAYS ACTIVE
             </Typography>
             <Typography variant="h6" sx={{ fontWeight: 800, mt: 0.5 }}>
               {totalDaysActive}

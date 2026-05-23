@@ -66,3 +66,21 @@ export const getRemindersText = (mask: number): string => {
   }
   return `${selectedHours.length} times / day`;
 };
+
+export const getLocalDateString = (d: Date = new Date()): string => {
+  const offset = d.getTimezoneOffset();
+  const localDate = new Date(d.getTime() - offset * 60 * 1000);
+  return localDate.toISOString().split('T')[0];
+};
+
+export const getReminderHoursText = (mask: number): string => {
+  if (!mask) return 'None';
+  const selectedHours: string[] = [];
+  for (let h = 0; h < 24; h++) {
+    if ((mask & (1 << h)) !== 0) {
+      selectedHours.push(`${String(h).padStart(2, '0')}:00`);
+    }
+  }
+  return selectedHours.join(', ');
+};
+

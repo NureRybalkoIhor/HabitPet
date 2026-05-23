@@ -33,7 +33,19 @@ const PetStatusCard = ({ pet, currentXp, actionLoading, onFeed, onPlay }: PetSta
     return `${publicUrl}/hamster_normal.png`;
   };
 
+  const getPetState = () => {
+    if (!pet) return { label: 'UNKNOWN', color: '#888', bg: '#f5f5f5' };
+    if (pet.health <= 30 || pet.hunger >= 80) {
+      return { label: 'PET STATUS: BAD', color: '#d71920', bg: '#ffebeb' };
+    }
+    if (pet.happiness >= 75 && pet.mood >= 75) {
+      return { label: 'PET STATUS: GOOD', color: '#437F70', bg: '#effaf3' };
+    }
+    return { label: 'PET STATUS: NORMAL', color: '#4A6070', bg: '#f0f4f8' };
+  };
+
   const fullness = pet ? Math.max(0, 100 - pet.hunger) : 0;
+  const petState = getPetState();
 
   return (
     <Box
@@ -88,16 +100,17 @@ const PetStatusCard = ({ pet, currentXp, actionLoading, onFeed, onPlay }: PetSta
         sx={{
           fontSize: '11px',
           fontWeight: 700,
-          color: '#437F70',
-          bgcolor: '#effaf3',
+          color: petState.color,
+          bgcolor: petState.bg,
           px: 1.6,
           py: 0.5,
           borderRadius: '20px',
           letterSpacing: '0.08em',
           mb: 4,
+          border: `1px solid ${petState.color}20`,
         }}
       >
-        TEMPLE GUARDIAN
+        {petState.label}
       </Typography>
 
       <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 2.5, mb: 4 }}>

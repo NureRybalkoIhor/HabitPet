@@ -77,8 +77,8 @@ const DashboardPage = () => {
   }
 
   const handleFeed = async () => {
-    if (!userId || !userProfile?.Stats) return;
-    if (userProfile.Stats.currentXp < 10) {
+    if (!userId || !userProfile?.stats) return;
+    if (userProfile.stats.currentXp < 10) {
       setToast({ message: 'You need at least 10 XP to feed your pet.', type: 'error' });
       return;
     }
@@ -95,8 +95,8 @@ const DashboardPage = () => {
   };
 
   const handlePlay = async () => {
-    if (!userId || !userProfile?.Stats) return;
-    if (userProfile.Stats.currentXp < 15) {
+    if (!userId || !userProfile?.stats) return;
+    if (userProfile.stats.currentXp < 15) {
       setToast({ message: 'You need at least 15 XP to play with your pet.', type: 'error' });
       return;
     }
@@ -112,12 +112,12 @@ const DashboardPage = () => {
     }
   };
 
-  const handleCompleteHabit = async (habitId: number, title: string) => {
+  const handleCompleteHabit = async (habitId: number, title: string, note?: string) => {
     if (!userId) return;
     setActionLoading(`complete-${habitId}`);
     try {
-      await completeHabit(habitId, userId);
-      setToast({ message: `Ritual "${title}" completed successfully! XP gained.`, type: 'success' });
+      await completeHabit(habitId, userId, note);
+      setToast({ message: `Habit "${title}" completed successfully! XP gained.`, type: 'success' });
       await fetchData();
     } catch (error) {
       setToast({ message: 'Failed to mark habit as completed.', type: 'error' });
@@ -143,13 +143,7 @@ const DashboardPage = () => {
     }
   };
 
-  const handleCreatePlaceholder = () => {
-    setToast({ message: 'Ritual creation will be unlocked in the next stage of training.', type: 'success' });
-  };
 
-  const handlePresetPlaceholder = () => {
-    setToast({ message: 'Preset templates catalog will be unlocked in the next stage.', type: 'success' });
-  };
 
   return (
     <Box
@@ -283,7 +277,7 @@ const DashboardPage = () => {
       >
         <PetStatusCard
           pet={pet}
-          currentXp={userProfile?.Stats?.currentXp || 0}
+          currentXp={userProfile?.stats?.currentXp || 0}
           actionLoading={actionLoading}
           onFeed={handleFeed}
           onPlay={handlePlay}
@@ -291,11 +285,11 @@ const DashboardPage = () => {
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <UserStatsCard
-            currentLevel={userProfile?.Stats?.currentLevel || 1}
-            totalXpEarned={userProfile?.Stats?.totalXpEarned || 0}
-            currentXp={userProfile?.Stats?.currentXp || 0}
-            totalHabitsDone={userProfile?.Stats?.totalHabitsDone || 0}
-            totalDaysActive={userProfile?.Stats?.totalDaysActive || 0}
+            currentLevel={userProfile?.stats?.currentLevel || 1}
+            totalXpEarned={userProfile?.stats?.totalXpEarned || 0}
+            currentXp={userProfile?.stats?.currentXp || 0}
+            totalHabitsDone={userProfile?.stats?.totalHabitsDone || 0}
+            totalDaysActive={userProfile?.stats?.totalDaysActive || 0}
           />
           <HabitsChecklist
             habits={habits}
@@ -303,8 +297,7 @@ const DashboardPage = () => {
             setFilterToday={setFilterToday}
             actionLoading={actionLoading}
             onCompleteHabit={handleCompleteHabit}
-            onCreatePlaceholder={handleCreatePlaceholder}
-            onPresetPlaceholder={handlePresetPlaceholder}
+            onRefresh={fetchData}
           />
         </Box>
       </Box>

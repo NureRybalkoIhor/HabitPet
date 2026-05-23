@@ -143,7 +143,7 @@ const RegisterPage = () => {
         try {
           await uploadAvatar(response.userId, avatarFile);
         } catch {
-          // аватар не критичний — ігноруємо помилку
+          // Avatar is non-critical - ignore error
         }
       }
 

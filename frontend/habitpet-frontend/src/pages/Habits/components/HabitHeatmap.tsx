@@ -1,17 +1,11 @@
 import { useState } from 'react';
 import { Box, Typography, Tooltip, Button } from '@mui/material';
 import { UserHabit } from '../../../api/habitsApi';
+import { getLocalDateString } from '../../../utils/habitHelpers';
 
 interface HabitHeatmapProps {
   habits: UserHabit[];
 }
-
-const getLocalDateString = (d: Date = new Date()) => {
-  const offset = d.getTimezoneOffset();
-  const localDate = new Date(d.getTime() - offset * 60 * 1000);
-  return localDate.toISOString().split('T')[0];
-};
-
 const HabitHeatmap = ({ habits }: HabitHeatmapProps) => {
   const [selectedSeason, setSelectedSeason] = useState<'WINTER' | 'SPRING' | 'SUMMER' | 'AUTUMN'>('SPRING');
   const [selectedYear, setSelectedYear] = useState<number>(2026);
@@ -135,7 +129,7 @@ const HabitHeatmap = ({ habits }: HabitHeatmapProps) => {
               color: '#4A6070',
             }}
           >
-            SEASONAL RITUAL TIMELINE
+            SEASONAL HABIT TIMELINE
           </Typography>
           <Typography
             sx={{
