@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +13,7 @@ namespace HabitPet.Application.DTOs
         public string Description { get; set; } = string.Empty;
         public bool IsPositive { get; set; }
         public bool IsActive { get; set; }
+        public bool? IsMastered { get; set; }
         public int Difficulty { get; set; }
         public int Priority { get; set; }
         public int DayMask { get; set; }

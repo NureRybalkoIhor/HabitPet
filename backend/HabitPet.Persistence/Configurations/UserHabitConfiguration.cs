@@ -1,4 +1,4 @@
-﻿using HabitPet.Domain.Entities;
+using HabitPet.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,6 +18,7 @@ namespace HabitPet.Persistence.Configurations
             builder.Property(uh => uh.Title).IsRequired().HasMaxLength(100);
             builder.Property(uh => uh.Description).HasMaxLength(500);
             builder.Property(uh => uh.IsActive).HasDefaultValue(true);
+            builder.Property(uh => uh.IsMastered).HasDefaultValue(false);
             builder.Property(uh => uh.CreatedAt).HasDefaultValueSql("GETDATE()");
 
             builder.HasOne(uh => uh.User)
