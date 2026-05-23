@@ -35,22 +35,31 @@ namespace HabitPet.Api.BackgroundServices
                 {
                     try
                     {
-                        await RunDailyResetAsync(today);
+                        await RunDailyStreakResetAsync(today);
                         _lastProcessedDate = today;
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Error executing DailyResetWorker logic.");
+                        _logger.LogError(ex, "Error executing DailyResetWorker streak reset logic.");
                     }
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(15), stoppingToken);
+                try
+                {
+                    await RunHourlyPetDecayAsync();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error executing Hourly decay logic.");
+                }
+
+                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
             }
         }
 
-        private async Task RunDailyResetAsync(DateOnly today)
+        private async Task RunDailyStreakResetAsync(DateOnly today)
         {
-            _logger.LogInformation($"Running DailyResetWorker logic for {today}");
+            _logger.LogInformation($"Running DailyResetWorker streak reset logic for {today}");
 
             using (var scope = _scopeFactory.CreateScope())
             {
@@ -84,6 +93,18 @@ namespace HabitPet.Api.BackgroundServices
                     }
                 }
 
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        private async Task RunHourlyPetDecayAsync()
+        {
+            _logger.LogInformation("Running Hourly Pet Decay logic");
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<HabitPetDbContext>();
+
                 var pets = await dbContext.Pets.ToListAsync();
                 foreach (var pet in pets)
                 {
@@ -94,7 +115,7 @@ namespace HabitPet.Api.BackgroundServices
                     {
                         pet.Health = Math.Max(0, pet.Health - 5);
                     }
-                    _logger.LogInformation($"Decayed pet stats for user {pet.UserId}. Health: {pet.Health}, Hunger: {pet.Hunger}, Happiness: {pet.Happiness}");
+                    _logger.LogInformation($"Hourly decay for user {pet.UserId}. Health: {pet.Health}, Hunger: {pet.Hunger}, Happiness: {pet.Happiness}");
                 }
 
                 await dbContext.SaveChangesAsync();
