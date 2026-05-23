@@ -5,13 +5,18 @@ using HabitPet.Persistence.Context;
 using HabitPet.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using HabitPet.Identity.Services;
+using HabitPet.Api.BackgroundServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -39,6 +44,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<OtpService>();
+builder.Services.AddHostedService<DailyResetWorker>();
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -68,6 +74,13 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<HabitPetDbContext>();
+    HabitPet.Persistence.Context.DbInitializer.Initialize(context);
+}
 
 if (app.Environment.IsDevelopment())
 {

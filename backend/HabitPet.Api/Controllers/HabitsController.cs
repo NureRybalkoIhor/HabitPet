@@ -1,4 +1,4 @@
-﻿using HabitPet.Application.DTOs;
+using HabitPet.Application.DTOs;
 using HabitPet.Application.Services;
 using HabitPet.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +23,19 @@ namespace HabitPet.Api.Controllers
             return Ok(habits);
         }
 
+        [HttpGet("templates")]
+        public async Task<IActionResult> GetHabitTemplates()
+        {
+            var templates = await _habitService.GetTemplatesAsync();
+            return Ok(templates);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateHabit([FromBody] CreateUserHabitDto dto)
         {
             var userHabit = new UserHabit
             {
+                UserId = dto.UserId,
                 Title = dto.Title,
                 Description = dto.Description,
                 IsPositive = dto.IsPositive,
@@ -56,7 +64,8 @@ namespace HabitPet.Api.Controllers
                 Priority = dto.Priority,
                 DayMask = dto.DayMask,
                 HourMask = dto.HourMask,
-                ReminderTime = dto.ReminderTime
+                ReminderTime = dto.ReminderTime,
+                IsActive = dto.IsActive
             };
 
             await _habitService.UpdateHabitAsync(userHabit);
@@ -71,9 +80,9 @@ namespace HabitPet.Api.Controllers
         }
 
         [HttpPost("{userHabitId}/complete/{userId}")]
-        public async Task<IActionResult> CompleteHabit(int userHabitId, int userId)
+        public async Task<IActionResult> CompleteHabit(int userHabitId, int userId, [FromQuery] string? note = null)
         {
-            await _habitService.CompleteHabitAsync(userHabitId, userId);
+            await _habitService.CompleteHabitAsync(userHabitId, userId, note);
             return Ok();
         }
     }

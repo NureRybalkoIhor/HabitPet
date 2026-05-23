@@ -1,4 +1,4 @@
-﻿using HabitPet.Application.Interfaces;
+using HabitPet.Application.Interfaces;
 using HabitPet.Domain.Entities;
 using HabitPet.Domain.Enums;
 using System;
@@ -15,22 +15,30 @@ namespace HabitPet.Application.Services
         private readonly IStreakRepository _streakRepository;
         private readonly XpService _xpService;
         private readonly StreakService _streakService;
+        private readonly IHabitRepository _habitRepository;
 
         public HabitService(
             IUserHabitRepository userHabitRepository,
             IStreakRepository streakRepository,
             XpService xpService,
-            StreakService streakService)
+            StreakService streakService,
+            IHabitRepository habitRepository)
         {
             _userHabitRepository = userHabitRepository;
             _streakRepository = streakRepository;
             _xpService = xpService;
             _streakService = streakService;
+            _habitRepository = habitRepository;
         }
 
         public async Task<IEnumerable<UserHabit>> GetUserHabitsAsync(int userId)
         {
             return await _userHabitRepository.GetByUserIdAsync(userId);
+        }
+
+        public async Task<IEnumerable<Habit>> GetTemplatesAsync()
+        {
+            return await _habitRepository.GetAllAsync();
         }
 
         public async Task AddHabitAsync(UserHabit userHabit)
@@ -42,20 +50,28 @@ namespace HabitPet.Application.Services
 
         public async Task UpdateHabitAsync(UserHabit userHabit)
         {
-            await _userHabitRepository.UpdateAsync(userHabit);
+            var existing = await _userHabitRepository.GetByIdAsync(userHabit.UserHabitId);
+            if (existing == null) return;
+
+            existing.Title = userHabit.Title;
+            existing.Description = userHabit.Description;
+            existing.IsPositive = userHabit.IsPositive;
+            existing.Difficulty = userHabit.Difficulty;
+            existing.Priority = userHabit.Priority;
+            existing.DayMask = userHabit.DayMask;
+            existing.HourMask = userHabit.HourMask;
+            existing.ReminderTime = userHabit.ReminderTime;
+            existing.IsActive = userHabit.IsActive;
+
+            await _userHabitRepository.UpdateAsync(existing);
         }
 
         public async Task DeleteHabitAsync(int id)
         {
-            var habit = await _userHabitRepository.GetByIdAsync(id);
-            if (habit != null)
-            {
-                habit.IsActive = false;
-                await _userHabitRepository.UpdateAsync(habit);
-            }
+            await _userHabitRepository.DeleteAsync(id);
         }
 
-        public async Task CompleteHabitAsync(int userHabitId, int userId)
+        public async Task CompleteHabitAsync(int userHabitId, int userId, string? note = null)
         {
             var habit = await _userHabitRepository.GetByIdAsync(userHabitId);
             if (habit == null) return;
@@ -67,6 +83,19 @@ namespace HabitPet.Application.Services
 
             await _streakService.UpdateStreakAsync(userHabitId);
             await _xpService.AddXpAsync(userId, xp, XpReasonType.HabitDone, userHabitId);
+
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            if (!habit.History.Any(h => h.ActionDate == today && h.HabitStatus == HabitStatus.Done))
+            {
+                habit.History.Add(new HabitHistory
+                {
+                    ActionDate = today,
+                    HabitStatus = HabitStatus.Done,
+                    MarkedAt = DateTime.UtcNow,
+                    UserNote = note
+                });
+                await _userHabitRepository.UpdateAsync(habit);
+            }
         }
     }
 }

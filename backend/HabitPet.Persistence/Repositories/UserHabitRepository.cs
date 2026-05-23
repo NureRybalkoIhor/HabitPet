@@ -1,4 +1,4 @@
-﻿using HabitPet.Application.Interfaces;
+using HabitPet.Application.Interfaces;
 using HabitPet.Domain.Entities;
 using HabitPet.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -23,15 +23,20 @@ namespace HabitPet.Persistence.Repositories
         {
             return await _context.UserHabits
                 .Include(uh => uh.Habit)
+                    .ThenInclude(h => h.Category)
                 .Include(uh => uh.Streak)
-                .Where(uh => uh.UserId == userId && uh.IsActive)
+                .Include(uh => uh.History)
+                .Where(uh => uh.UserId == userId)
                 .ToListAsync();
         }
 
         public async Task<UserHabit?> GetByIdAsync(int id)
         {
             return await _context.UserHabits
+                .Include(uh => uh.Habit)
+                    .ThenInclude(h => h.Category)
                 .Include(uh => uh.Streak)
+                .Include(uh => uh.History)
                 .FirstOrDefaultAsync(uh => uh.UserHabitId == id);
         }
 
