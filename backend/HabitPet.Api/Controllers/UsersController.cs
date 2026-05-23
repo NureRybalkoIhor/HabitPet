@@ -8,11 +8,13 @@ namespace HabitPet.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserHabitRepository _userHabitRepository;
         private readonly IWebHostEnvironment _env;
 
-        public UsersController(IUserRepository userRepository, IWebHostEnvironment env)
+        public UsersController(IUserRepository userRepository, IUserHabitRepository userHabitRepository, IWebHostEnvironment env)
         {
             _userRepository = userRepository;
+            _userHabitRepository = userHabitRepository;
             _env = env;
         }
 
@@ -21,6 +23,9 @@ namespace HabitPet.Api.Controllers
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null) return NotFound();
+
+            var habits = await _userHabitRepository.GetByUserIdAsync(userId);
+            var totalHabitsDone = habits.Count(h => h.IsMastered == true);
 
             return Ok(new
             {
@@ -35,7 +40,7 @@ namespace HabitPet.Api.Controllers
                     user.Stats.TotalXpEarned,
                     user.Stats.CurrentLevel,
                     user.Stats.XpToNextLevel,
-                    user.Stats.TotalHabitsDone,
+                    TotalHabitsDone = totalHabitsDone,
                     user.Stats.TotalDaysActive
                 } : null
             });

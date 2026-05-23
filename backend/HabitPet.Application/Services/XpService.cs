@@ -1,4 +1,4 @@
-﻿using HabitPet.Application.Interfaces;
+using HabitPet.Application.Interfaces;
 using HabitPet.Domain.Entities;
 using HabitPet.Domain.Enums;
 using System;
@@ -46,7 +46,14 @@ namespace HabitPet.Application.Services
             if (user?.Stats != null)
             {
                 user.Stats.CurrentXp += amount;
-                user.Stats.TotalXpEarned += amount;
+                if (amount > 0)
+                {
+                    user.Stats.TotalXpEarned += amount;
+                }
+                if ((reason == XpReasonType.HabitDone || reason == XpReasonType.ChallengeCompleted) && amount > 0)
+                {
+                    user.Stats.TotalHabitsDone += 1;
+                }
                 UpdateLevel(user.Stats);
                 await _userRepository.UpdateAsync(user);
             }

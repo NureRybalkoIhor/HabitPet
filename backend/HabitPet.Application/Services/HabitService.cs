@@ -97,5 +97,17 @@ namespace HabitPet.Application.Services
                 await _userHabitRepository.UpdateAsync(habit);
             }
         }
+
+        public async Task MasterHabitAsync(int userHabitId, int userId)
+        {
+            var habit = await _userHabitRepository.GetByIdAsync(userHabitId);
+            if (habit == null) return;
+
+            habit.IsMastered = true;
+            habit.IsActive = false;
+
+            await _userHabitRepository.UpdateAsync(habit);
+            await _xpService.AddXpAsync(userId, 500, XpReasonType.ChallengeCompleted, userHabitId);
+        }
     }
 }

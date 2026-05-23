@@ -85,5 +85,12 @@ namespace HabitPet.Api.Controllers
             await _habitService.CompleteHabitAsync(userHabitId, userId, note);
             return Ok();
         }
+
+        [HttpPost("{userHabitId}/master/{userId}")]
+        public async Task<IActionResult> MasterHabit(int userHabitId, int userId)
+        {
+            await _habitService.MasterHabitAsync(userHabitId, userId);
+            return Ok();
+        }
     }
 }
