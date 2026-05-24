@@ -13,11 +13,16 @@ namespace HabitPet.Application.Services
     {
         private readonly IPetRepository _petRepository;
         private readonly XpService _xpService;
+        private readonly AchievementService _achievementService;
 
-        public PetService(IPetRepository petRepository, XpService xpService)
+        public PetService(
+            IPetRepository petRepository,
+            XpService xpService,
+            AchievementService achievementService)
         {
             _petRepository = petRepository;
             _xpService = xpService;
+            _achievementService = achievementService;
         }
 
         public async Task<Pet?> GetPetAsync(int userId)
@@ -50,6 +55,7 @@ namespace HabitPet.Application.Services
 
             await _petRepository.UpdateAsync(pet);
             await _xpService.AddXpAsync(userId, -xpCost, XpReasonType.HabitDone);
+            await _achievementService.CheckAndUnlockAllAsync(userId);
         }
 
         public async Task PlayWithPetAsync(int userId, int xpCost)
@@ -73,6 +79,7 @@ namespace HabitPet.Application.Services
 
             await _petRepository.UpdateAsync(pet);
             await _xpService.AddXpAsync(userId, -xpCost, XpReasonType.HabitDone);
+            await _achievementService.CheckAndUnlockAllAsync(userId);
         }
 
         public async Task DecayPetAsync(int userId)

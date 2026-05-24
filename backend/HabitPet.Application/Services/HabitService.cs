@@ -16,19 +16,22 @@ namespace HabitPet.Application.Services
         private readonly XpService _xpService;
         private readonly StreakService _streakService;
         private readonly IHabitRepository _habitRepository;
+        private readonly AchievementService _achievementService;
 
         public HabitService(
             IUserHabitRepository userHabitRepository,
             IStreakRepository streakRepository,
             XpService xpService,
             StreakService streakService,
-            IHabitRepository habitRepository)
+            IHabitRepository habitRepository,
+            AchievementService achievementService)
         {
             _userHabitRepository = userHabitRepository;
             _streakRepository = streakRepository;
             _xpService = xpService;
             _streakService = streakService;
             _habitRepository = habitRepository;
+            _achievementService = achievementService;
         }
 
         public async Task<IEnumerable<UserHabit>> GetUserHabitsAsync(int userId)
@@ -96,6 +99,8 @@ namespace HabitPet.Application.Services
                 });
                 await _userHabitRepository.UpdateAsync(habit);
             }
+
+            await _achievementService.CheckAndUnlockAllAsync(userId);
         }
 
         public async Task MasterHabitAsync(int userHabitId, int userId)
@@ -108,6 +113,8 @@ namespace HabitPet.Application.Services
 
             await _userHabitRepository.UpdateAsync(habit);
             await _xpService.AddXpAsync(userId, 500, XpReasonType.ChallengeCompleted, userHabitId);
+
+            await _achievementService.CheckAndUnlockAllAsync(userId);
         }
     }
 }

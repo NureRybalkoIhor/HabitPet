@@ -1,4 +1,4 @@
-﻿using HabitPet.Domain.Entities;
+using HabitPet.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -20,6 +20,8 @@ namespace HabitPet.Persistence.Configurations
             builder.Property(a => a.TypeCondition).IsRequired().HasMaxLength(50);
             builder.Property(a => a.Icon).HasMaxLength(200);
             builder.Property(a => a.XpReward).IsRequired();
+            builder.Property(a => a.Category).IsRequired().HasMaxLength(50);
+            builder.Property(a => a.Rarity).IsRequired().HasMaxLength(50);
         }
     }
 }

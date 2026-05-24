@@ -41,6 +41,39 @@ namespace HabitPet.Persistence.Context
                 context.Habits.AddRange(habits);
                 context.SaveChanges();
             }
+
+            if (!context.Achievements.Any())
+            {
+                context.Achievements.AddRange(new[]
+                {
+                    // Rituals Category
+                    new Achievement { Title = "First Breath", Description = "Complete your first habit.", TypeCondition = "TotalHabitsDone", ValueCondition = 1, Icon = "spa", XpReward = 30, Category = "Ritual", Rarity = "Very Easy" },
+                    new Achievement { Title = "Daily Path", Description = "Complete 10 habits.", TypeCondition = "TotalHabitsDone", ValueCondition = 10, Icon = "directions_walk", XpReward = 75, Category = "Ritual", Rarity = "Easy" },
+                    new Achievement { Title = "Deep Ritual", Description = "Complete 50 habits.", TypeCondition = "TotalHabitsDone", ValueCondition = 50, Icon = "self_improvement", XpReward = 200, Category = "Ritual", Rarity = "Medium" },
+                    new Achievement { Title = "Way of the Sage", Description = "Complete 150 habits.", TypeCondition = "TotalHabitsDone", ValueCondition = 150, Icon = "psychology", XpReward = 400, Category = "Ritual", Rarity = "Hard" },
+                    new Achievement { Title = "Infinite Stream", Description = "Complete 500 habits.", TypeCondition = "TotalHabitsDone", ValueCondition = 500, Icon = "all_inclusive", XpReward = 1000, Category = "Ritual", Rarity = "Super Hard" },
+                    new Achievement { Title = "Inner Peace", Description = "Successfully avoid a negative habit for the first time.", TypeCondition = "AvoidHabitsDone", ValueCondition = 1, Icon = "shield", XpReward = 50, Category = "Ritual", Rarity = "Very Easy" },
+                    new Achievement { Title = "Shield of Will", Description = "Successfully avoid negative habits 15 times.", TypeCondition = "AvoidHabitsDone", ValueCondition = 15, Icon = "security", XpReward = 250, Category = "Ritual", Rarity = "Medium" },
+                    new Achievement { Title = "First Awakening", Description = "Master your first habit.", TypeCondition = "TotalHabitsMastered", ValueCondition = 1, Icon = "brightness_5", XpReward = 150, Category = "Ritual", Rarity = "Easy" },
+                    new Achievement { Title = "Zen Master", Description = "Master 5 habits.", TypeCondition = "TotalHabitsMastered", ValueCondition = 5, Icon = "workspace_premium", XpReward = 500, Category = "Ritual", Rarity = "Hard" },
+                    new Achievement { Title = "Mountain Stability", Description = "Master 10 habits.", TypeCondition = "TotalHabitsMastered", ValueCondition = 10, Icon = "filter_hdr", XpReward = 1000, Category = "Ritual", Rarity = "Super Hard" },
+
+                    // Companion Category
+                    new Achievement { Title = "Kind Heart", Description = "Feed your companion hamster 5 times.", TypeCondition = "TotalTimesFed", ValueCondition = 5, Icon = "restaurant", XpReward = 30, Category = "Companion", Rarity = "Very Easy" },
+                    new Achievement { Title = "Generous Provider", Description = "Feed your companion hamster 30 times.", TypeCondition = "TotalTimesFed", ValueCondition = 30, Icon = "local_dining", XpReward = 200, Category = "Companion", Rarity = "Medium" },
+                    new Achievement { Title = "Playful Spirit", Description = "Play with your companion hamster 5 times.", TypeCondition = "TotalTimesPlayed", ValueCondition = 5, Icon = "sports_esports", XpReward = 30, Category = "Companion", Rarity = "Very Easy" },
+                    new Achievement { Title = "Soul Connection", Description = "Play with your companion hamster 30 times.", TypeCondition = "TotalTimesPlayed", ValueCondition = 30, Icon = "favorite", XpReward = 200, Category = "Companion", Rarity = "Medium" },
+                    new Achievement { Title = "Pure Harmony", Description = "Reach a Pet Care Score of 100%.", TypeCondition = "CareScore", ValueCondition = 100, Icon = "favorite_border", XpReward = 300, Category = "Companion", Rarity = "Hard" },
+
+                    // Journey Category
+                    new Achievement { Title = "Quiet Steps", Description = "Stay active on the platform for 3 days.", TypeCondition = "TotalDaysActive", ValueCondition = 3, Icon = "calendar_today", XpReward = 30, Category = "Journey", Rarity = "Very Easy" },
+                    new Achievement { Title = "Habitual Flow", Description = "Stay active on the platform for 10 days.", TypeCondition = "TotalDaysActive", ValueCondition = 10, Icon = "date_range", XpReward = 100, Category = "Journey", Rarity = "Easy" },
+                    new Achievement { Title = "Dedicated Disciple", Description = "Stay active on the platform for 30 days.", TypeCondition = "TotalDaysActive", ValueCondition = 30, Icon = "event_available", XpReward = 300, Category = "Journey", Rarity = "Medium" },
+                    new Achievement { Title = "Ascended Traveler", Description = "Reach Level 10.", TypeCondition = "CurrentLevel", ValueCondition = 10, Icon = "trending_up", XpReward = 400, Category = "Journey", Rarity = "Hard" },
+                    new Achievement { Title = "Enlightened Spirit", Description = "Earn 10,000 total lifetime XP.", TypeCondition = "TotalXpEarned", ValueCondition = 10000, Icon = "auto_awesome", XpReward = 1000, Category = "Journey", Rarity = "Super Hard" }
+                });
+                context.SaveChanges();
+            }
         }
 
         private static Category EnsureCategory(HabitPetDbContext context, string name, string color)

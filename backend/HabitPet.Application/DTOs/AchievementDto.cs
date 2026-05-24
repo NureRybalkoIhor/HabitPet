@@ -4,20 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HabitPet.Domain.Entities
+namespace HabitPet.Application.DTOs
 {
-    public class Achievement
+    public class AchievementDto
     {
         public int AchievementId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string TypeCondition { get; set; } = string.Empty;
-        public int ValueCondition { get; set; }
-        public string Icon { get; set; } = string.Empty;
-        public int XpReward { get; set; }
         public string Category { get; set; } = string.Empty;
         public string Rarity { get; set; } = string.Empty;
-
-        public ICollection<UserAchievement> UserAchievements { get; set; } = new List<UserAchievement>();
+        public string Icon { get; set; } = string.Empty;
+        public int XpReward { get; set; }
+        public int ValueCondition { get; set; }
+        public bool IsUnlocked { get; set; }
+        public DateTime? UnlockedAt { get; set; }
+        public int CurrentProgress { get; set; }
     }
 }

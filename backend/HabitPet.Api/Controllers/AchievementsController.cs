@@ -1,4 +1,4 @@
-﻿using HabitPet.Application.Services;
+using HabitPet.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HabitPet.Api.Controllers
@@ -24,7 +24,8 @@ namespace HabitPet.Api.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserAchievements(int userId)
         {
-            var achievements = await _achievementService.GetUserAchievementsAsync(userId);
+            await _achievementService.CheckAndUnlockAllAsync(userId);
+            var achievements = await _achievementService.GetUserAchievementsWithProgressAsync(userId);
             return Ok(achievements);
         }
 
