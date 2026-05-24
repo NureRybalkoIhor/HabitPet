@@ -44,7 +44,6 @@ const PetStatusCard = ({ pet, currentXp, actionLoading, onFeed, onPlay }: PetSta
     return { label: 'PET STATUS: NORMAL', color: '#4A6070', bg: '#f0f4f8' };
   };
 
-  const fullness = pet ? Math.max(0, 100 - pet.hunger) : 0;
   const petState = getPetState();
 
   return (
@@ -138,15 +137,15 @@ const PetStatusCard = ({ pet, currentXp, actionLoading, onFeed, onPlay }: PetSta
         <Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.8 }}>
             <Typography sx={{ fontSize: '12px', fontWeight: 700, color: '#4A6070', letterSpacing: '0.05em' }}>
-              FULLNESS
+              HUNGER
             </Typography>
             <Typography sx={{ fontSize: '12px', fontWeight: 800, color: '#111' }}>
-              {fullness}%
+              {pet?.hunger || 0}%
             </Typography>
           </Box>
           <LinearProgress
             variant="determinate"
-            value={fullness}
+            value={pet?.hunger || 0}
             sx={{
               height: 6,
               borderRadius: 3,

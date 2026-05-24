@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +16,7 @@ namespace HabitPet.Domain.Entities
         public int Health { get; set; }
         public DateTime LastFedAt { get; set; }
         public DateTime LastPlayedAt { get; set; }
+        public DateTime LastDecayedAt { get; set; } = DateTime.UtcNow;
 
         public int UserId { get; set; }
         public User User { get; set; } = null!;

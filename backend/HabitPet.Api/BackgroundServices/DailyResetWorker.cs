@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using HabitPet.Persistence.Context;
 using HabitPet.Domain.Entities;
 using HabitPet.Domain.Enums;
+using HabitPet.Application.Services;
 
 namespace HabitPet.Api.BackgroundServices
 {
@@ -103,22 +104,23 @@ namespace HabitPet.Api.BackgroundServices
 
             using (var scope = _scopeFactory.CreateScope())
             {
+                var petService = scope.ServiceProvider.GetRequiredService<PetService>();
                 var dbContext = scope.ServiceProvider.GetRequiredService<HabitPetDbContext>();
 
                 var pets = await dbContext.Pets.ToListAsync();
                 foreach (var pet in pets)
                 {
-                    pet.Hunger = Math.Min(100, pet.Hunger + 2);
-                    pet.Happiness = Math.Max(0, pet.Happiness - 1);
+                    var oldHunger = pet.Hunger;
+                    var oldHappiness = pet.Happiness;
+                    var oldHealth = pet.Health;
 
-                    if (pet.Hunger > 80)
+                    await petService.CatchUpDecayAsync(pet);
+
+                    if (pet.Hunger != oldHunger || pet.Happiness != oldHappiness || pet.Health != oldHealth)
                     {
-                        pet.Health = Math.Max(0, pet.Health - 5);
+                        _logger.LogInformation($"Hourly decay for user {pet.UserId}. Health: {pet.Health}, Hunger: {pet.Hunger}, Happiness: {pet.Happiness}");
                     }
-                    _logger.LogInformation($"Hourly decay for user {pet.UserId}. Health: {pet.Health}, Hunger: {pet.Hunger}, Happiness: {pet.Happiness}");
                 }
-
-                await dbContext.SaveChangesAsync();
             }
         }
     }

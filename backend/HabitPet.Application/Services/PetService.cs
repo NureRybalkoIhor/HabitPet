@@ -1,4 +1,4 @@
-﻿using HabitPet.Application.Interfaces;
+using HabitPet.Application.Interfaces;
 using HabitPet.Domain.Entities;
 using HabitPet.Domain.Enums;
 using System;
@@ -22,13 +22,19 @@ namespace HabitPet.Application.Services
 
         public async Task<Pet?> GetPetAsync(int userId)
         {
-            return await _petRepository.GetByUserIdAsync(userId);
+            var pet = await _petRepository.GetByUserIdAsync(userId);
+            if (pet == null) return null;
+
+            await CatchUpDecayAsync(pet);
+            return pet;
         }
 
         public async Task FeedPetAsync(int userId, int xpCost)
         {
             var pet = await _petRepository.GetByUserIdAsync(userId);
             if (pet == null) return;
+
+            await CatchUpDecayAsync(pet);
 
             pet.Hunger = Math.Max(0, pet.Hunger - 30);
             pet.Happiness = Math.Min(100, pet.Happiness + 10);
@@ -50,6 +56,8 @@ namespace HabitPet.Application.Services
         {
             var pet = await _petRepository.GetByUserIdAsync(userId);
             if (pet == null) return;
+
+            await CatchUpDecayAsync(pet);
 
             pet.Happiness = Math.Min(100, pet.Happiness + 20);
             pet.Mood = Math.Min(100, pet.Mood + 15);
@@ -74,11 +82,61 @@ namespace HabitPet.Application.Services
 
             pet.Hunger = Math.Min(100, pet.Hunger + 2);
             pet.Happiness = Math.Max(0, pet.Happiness - 1);
+            pet.LastDecayedAt = DateTime.UtcNow;
 
             if (pet.Hunger > 80)
                 pet.Health = Math.Max(0, pet.Health - 5);
 
             await _petRepository.UpdateAsync(pet);
+        }
+
+        public async Task CatchUpDecayAsync(Pet pet)
+        {
+            var now = DateTime.UtcNow;
+
+            if (pet.LastDecayedAt == DateTime.MinValue || pet.LastDecayedAt > now)
+            {
+                pet.LastDecayedAt = now;
+                await _petRepository.UpdateAsync(pet);
+                return;
+            }
+
+            var elapsed = now - pet.LastDecayedAt;
+            var elapsedHours = (int)elapsed.TotalHours;
+
+            if (elapsedHours >= 1)
+            {
+                for (int i = 0; i < elapsedHours; i++)
+                {
+                    pet.Hunger = Math.Min(100, pet.Hunger + 2);
+                    pet.Happiness = Math.Max(0, pet.Happiness - 1);
+
+                    if (pet.Hunger > 80)
+                    {
+                        pet.Health = Math.Max(0, pet.Health - 5);
+                    }
+                }
+
+                pet.LastDecayedAt = pet.LastDecayedAt.AddHours(elapsedHours);
+                await _petRepository.UpdateAsync(pet);
+            }
+        }
+
+        public async Task<IEnumerable<PetAction>> GetPetActionsAsync(int userId)
+        {
+            var pet = await _petRepository.GetByUserIdAsync(userId);
+            if (pet == null) return Enumerable.Empty<PetAction>();
+            return pet.PetActions.OrderByDescending(pa => pa.ActionTime).ToList();
+        }
+
+        public async Task<bool> UpdatePetNameAsync(int petId, string newName)
+        {
+            var pet = await _petRepository.GetByIdAsync(petId);
+            if (pet == null) return false;
+
+            pet.Name = newName;
+            await _petRepository.UpdateAsync(pet);
+            return true;
         }
     }
 }

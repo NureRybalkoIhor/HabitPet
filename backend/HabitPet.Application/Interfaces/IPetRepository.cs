@@ -1,4 +1,4 @@
-﻿using HabitPet.Domain.Entities;
+using HabitPet.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,7 @@ namespace HabitPet.Application.Interfaces
     public interface IPetRepository
     {
         Task<Pet?> GetByUserIdAsync(int userId);
+        Task<Pet?> GetByIdAsync(int petId);
         Task AddAsync(Pet pet);
         Task UpdateAsync(Pet pet);
     }

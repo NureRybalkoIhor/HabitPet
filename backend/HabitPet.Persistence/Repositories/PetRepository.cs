@@ -1,4 +1,4 @@
-﻿using HabitPet.Application.Interfaces;
+using HabitPet.Application.Interfaces;
 using HabitPet.Domain.Entities;
 using HabitPet.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +24,13 @@ namespace HabitPet.Persistence.Repositories
             return await _context.Pets
                 .Include(p => p.PetActions)
                 .FirstOrDefaultAsync(p => p.UserId == userId);
+        }
+
+        public async Task<Pet?> GetByIdAsync(int petId)
+        {
+            return await _context.Pets
+                .Include(p => p.PetActions)
+                .FirstOrDefaultAsync(p => p.PetId == petId);
         }
 
         public async Task AddAsync(Pet pet)
