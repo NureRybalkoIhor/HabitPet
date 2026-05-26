@@ -1,8 +1,9 @@
-﻿using HabitPet.Application.Interfaces;
+using HabitPet.Application.Interfaces;
 using HabitPet.Identity.Services;
 using HabitPet.Infrastructure.Services;
 using HabitPet.Identity.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace HabitPet.Api.Controllers
 {
@@ -13,12 +14,18 @@ namespace HabitPet.Api.Controllers
         private readonly AuthService _authService;
         private readonly OtpService _otpService;
         private readonly IEmailService _emailService;
+        private readonly IConfiguration _config;
 
-        public AuthController(AuthService authService, OtpService otpService, IEmailService emailService)
+        public AuthController(
+            AuthService authService, 
+            OtpService otpService, 
+            IEmailService emailService,
+            IConfiguration config)
         {
             _authService = authService;
             _otpService = otpService;
             _emailService = emailService;
+            _config = config;
         }
 
         [HttpPost("register")]
@@ -53,6 +60,38 @@ namespace HabitPet.Api.Controllers
             var isValid = _otpService.Verify(request.Email, request.Code);
             if (!isValid) return BadRequest("Invalid or expired code.");
             return Ok();
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            await _authService.ForgotPasswordAsync(request);
+            return Ok();
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            var result = await _authService.ResetPasswordAsync(request);
+            if (!result)
+                return BadRequest("Invalid or expired token.");
+            return Ok();
+        }
+
+        [HttpGet("google-config")]
+        public IActionResult GetGoogleConfig()
+        {
+            var clientId = _config["Google:ClientId"];
+            return Ok(new { clientId });
+        }
+
+        [HttpPost("google-login")]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
+        {
+            var result = await _authService.GoogleLoginAsync(request);
+            if (result == null)
+                return BadRequest("Invalid Google token.");
+            return Ok(result);
         }
     }
 }

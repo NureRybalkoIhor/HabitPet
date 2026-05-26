@@ -1,4 +1,4 @@
-﻿using HabitPet.Application.Interfaces;
+using HabitPet.Application.Interfaces;
 using HabitPet.Domain.Entities;
 using HabitPet.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +32,12 @@ namespace HabitPet.Persistence.Repositories
             return await _context.Users
                 .Include(u => u.Stats)
                 .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User?> GetByUsernameAsync(string username)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == username);
         }
 
         public async Task AddAsync(User user)

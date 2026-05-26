@@ -1,4 +1,4 @@
-﻿using HabitPet.Application.Interfaces;
+using HabitPet.Application.Interfaces;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Configuration;
@@ -36,6 +36,39 @@ namespace HabitPet.Infrastructure.Services
                     <p>Your OTP code is:</p>
                     <h1 style='letter-spacing: 8px;'>{code}</h1>
                     <p>Valid for 5 minutes.</p>"
+            };
+
+            using var smtp = new SmtpClient();
+            await smtp.ConnectAsync(
+                _config["Email:SmtpHost"],
+                int.Parse(_config["Email:SmtpPort"]!),
+                SecureSocketOptions.StartTls
+            );
+            await smtp.AuthenticateAsync(
+                _config["Email:SenderEmail"],
+                _config["Email:AppPassword"]
+            );
+            await smtp.SendAsync(message);
+            await smtp.DisconnectAsync(true);
+        }
+
+        public async Task SendPasswordResetEmailAsync(string toEmail, string resetLink)
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(
+                _config["Email:SenderName"],
+                _config["Email:SenderEmail"]
+            ));
+            message.To.Add(MailboxAddress.Parse(toEmail));
+            message.Subject = "Reset your HabitPet password";
+            message.Body = new TextPart("html")
+            {
+                Text = $@"
+                    <h2>HabitPet Password Reset</h2>
+                    <p>You requested to reset your password. Click the link below to set a new password:</p>
+                    <p><a href='{resetLink}' style='display:inline-block;background-color:#ff8624;color:white;padding:10px 20px;text-decoration:none;border-radius:4px;font-weight:bold;'>Reset Password</a></p>
+                    <p>If you did not request this, please ignore this email.</p>
+                    <p>The link is valid for 15 minutes.</p>"
             };
 
             using var smtp = new SmtpClient();

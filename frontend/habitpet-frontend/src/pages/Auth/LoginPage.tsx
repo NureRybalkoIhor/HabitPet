@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -10,7 +10,7 @@ import {
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { login } from '../../api/authApi';
+import { login, getGoogleConfig, googleLogin } from '../../api/authApi';
 import logo from '../../assets/Logo.png';
 import { useAuth } from '../../store/AuthContext';
 import { validateEmail, validatePassword } from '../../utils/validation';
@@ -27,6 +27,39 @@ const LoginPage = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const googleTokenClientRef = useRef<any>(null);
+
+  useEffect(() => {
+    const initGoogle = async () => {
+      try {
+        const config = await getGoogleConfig();
+        const googleObj = (window as any).google;
+        if (config.clientId && googleObj) {
+          googleTokenClientRef.current = googleObj.accounts.oauth2.initTokenClient({
+            client_id: config.clientId,
+            scope: 'email profile openid',
+            callback: async (tokenResponse: any) => {
+              if (tokenResponse.access_token) {
+                setIsLoading(true);
+                try {
+                  const response = await googleLogin({ accessToken: tokenResponse.access_token });
+                  setAuth(response.token, response.userId, response.username);
+                  navigate('/dashboard');
+                } catch {
+                  setError('Failed to log in with Google.');
+                } finally {
+                  setIsLoading(false);
+                }
+              }
+            },
+          });
+        }
+      } catch (err) {
+        console.error('Error loading Google login configuration:', err);
+      }
+    };
+    initGoogle();
+  }, [navigate, setAuth]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -174,6 +207,13 @@ const LoginPage = () => {
 
           <Button
             type="button"
+            onClick={() => {
+              if (googleTokenClientRef.current) {
+                googleTokenClientRef.current.requestAccessToken();
+              } else {
+                setError('Google Sign-In is not initialized. Please refresh.');
+              }
+            }}
             sx={{
               mt: 3.2,
               color: '#111',

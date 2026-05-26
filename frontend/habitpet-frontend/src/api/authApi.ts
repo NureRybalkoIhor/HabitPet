@@ -55,3 +55,21 @@ export const sendOtp = async (email: string): Promise<void> => {
 export const verifyOtp = async (email: string, code: string): Promise<void> => {
   await apiClient.post('/Auth/verify-otp', { email, code });
 };
+
+export interface GoogleLoginRequest {
+  accessToken: string;
+}
+
+export interface GoogleConfigResponse {
+  clientId: string;
+}
+
+export const getGoogleConfig = async (): Promise<GoogleConfigResponse> => {
+  const response = await apiClient.get<GoogleConfigResponse>('/Auth/google-config');
+  return response.data;
+};
+
+export const googleLogin = async (data: GoogleLoginRequest): Promise<AuthResponse> => {
+  const response = await apiClient.post<AuthResponse>('/Auth/google-login', data);
+  return response.data;
+};
