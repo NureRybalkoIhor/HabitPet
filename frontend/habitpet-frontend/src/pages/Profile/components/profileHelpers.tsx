@@ -16,6 +16,20 @@ export const getAvatarUrl = (url?: string) => {
 
 export const getReasonDetails = (type: string, xpAmount: number, habitTitle?: string) => {
   switch (type) {
+    case 'PetFeed':
+      return {
+        label: 'Fed pet companion',
+        color: '#ff8624',
+        bgColor: '#fff6ed',
+        icon: <PetsIcon sx={{ color: '#ff8624', fontSize: 20 }} />,
+      };
+    case 'PetPlay':
+      return {
+        label: 'Played with companion',
+        color: '#437F70',
+        bgColor: '#effaf6',
+        icon: <PetsIcon sx={{ color: '#437F70', fontSize: 20 }} />,
+      };
     case 'HabitDone':
       if (xpAmount < 0) {
         const isFeed = Math.abs(xpAmount) === 10;

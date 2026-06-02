@@ -50,7 +50,7 @@ namespace HabitPet.Application.Services
                 {
                     user.Stats.TotalXpEarned += amount;
                 }
-                if ((reason == XpReasonType.HabitDone || reason == XpReasonType.ChallengeCompleted) && amount > 0)
+                if (reason == XpReasonType.ChallengeCompleted && amount > 0)
                 {
                     user.Stats.TotalHabitsDone += 1;
                 }

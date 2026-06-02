@@ -54,7 +54,7 @@ namespace HabitPet.Application.Services
             });
 
             await _petRepository.UpdateAsync(pet);
-            await _xpService.AddXpAsync(userId, -xpCost, XpReasonType.HabitDone);
+            await _xpService.AddXpAsync(userId, -xpCost, XpReasonType.PetFeed);
             await _achievementService.CheckAndUnlockAllAsync(userId);
         }
 
@@ -78,7 +78,7 @@ namespace HabitPet.Application.Services
             });
 
             await _petRepository.UpdateAsync(pet);
-            await _xpService.AddXpAsync(userId, -xpCost, XpReasonType.HabitDone);
+            await _xpService.AddXpAsync(userId, -xpCost, XpReasonType.PetPlay);
             await _achievementService.CheckAndUnlockAllAsync(userId);
         }
 
