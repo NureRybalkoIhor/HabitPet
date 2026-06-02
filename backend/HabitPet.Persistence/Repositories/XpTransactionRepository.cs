@@ -1,4 +1,4 @@
-﻿using HabitPet.Application.Interfaces;
+using HabitPet.Application.Interfaces;
 using HabitPet.Domain.Entities;
 using HabitPet.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +22,7 @@ namespace HabitPet.Persistence.Repositories
         public async Task<IEnumerable<XpTransaction>> GetByUserIdAsync(int userId)
         {
             return await _context.XpTransactions
+                .Include(x => x.UserHabit)
                 .Where(x => x.UserId == userId)
                 .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();

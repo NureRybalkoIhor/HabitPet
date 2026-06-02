@@ -15,6 +15,8 @@ export interface UserProfile {
   username: string;
   email: string;
   avatarUrl?: string;
+  birthday?: string;
+  sex?: string;
   stats?: UserStats;
 }
 
@@ -32,4 +34,25 @@ export const uploadAvatar = async (userId: number, file: File): Promise<string> 
     { headers: { 'Content-Type': 'multipart/form-data' } }
   );
   return response.data.avatarUrl;
+};
+
+export const updateProfile = async (userId: number, data: Partial<UserProfile>): Promise<void> => {
+  await apiClient.put(`/Users/${userId}`, data);
+};
+
+export const changePassword = async (userId: number, data: any): Promise<void> => {
+  await apiClient.post(`/Users/${userId}/change-password`, data);
+};
+
+export interface XpTransaction {
+  xpTransactionId: number;
+  xpAmount: number;
+  typeReason: string;
+  createdAt: string;
+  habitTitle?: string;
+}
+
+export const getXpTransactions = async (userId: number): Promise<XpTransaction[]> => {
+  const response = await apiClient.get<XpTransaction[]>(`/Users/${userId}/xp-transactions`);
+  return response.data;
 };
