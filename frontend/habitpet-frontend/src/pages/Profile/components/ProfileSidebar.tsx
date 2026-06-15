@@ -36,6 +36,21 @@ const ProfileSidebar = ({
     }
   };
 
+  const getLevelProgress = () => {
+    const currentLevel = stats.currentLevel;
+    const totalXpEarned = stats.totalXpEarned;
+    const xpStart = currentLevel > 1 ? Math.pow((currentLevel - 1) * 10, 2) : 0;
+    const xpEnd = Math.pow(currentLevel * 10, 2);
+    const range = xpEnd - xpStart;
+    const progressInLevel = totalXpEarned - xpStart;
+    return {
+      current: progressInLevel,
+      max: range,
+    };
+  };
+
+  const levelInfo = getLevelProgress();
+
   return (
     <Card
       sx={{
@@ -161,10 +176,10 @@ const ProfileSidebar = ({
       <Box sx={{ width: '100%', mb: 4.5 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.2 }}>
           <Typography sx={{ fontFamily: authFont, fontSize: 11, fontWeight: 800, color: '#8c8881', letterSpacing: '0.05em' }}>
-            EXPERIENCE
+            LEVEL PROGRESS
           </Typography>
           <Typography sx={{ fontFamily: authFont, fontSize: 11, fontWeight: 900, color: '#161616' }}>
-            {stats.currentXp} / {stats.xpToNextLevel} XP
+            {levelInfo.current} / {levelInfo.max} XP
           </Typography>
         </Box>
         <LinearProgress
@@ -180,18 +195,28 @@ const ProfileSidebar = ({
             },
           }}
         />
-        <Typography
-          sx={{
-            fontFamily: authFont,
-            fontSize: 10.5,
-            fontWeight: 700,
-            color: '#8c8881',
-            mt: 1,
-            textAlign: 'right',
-          }}
-        >
-          {percentLeft}% ({xpLeft} XP) to next level
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
+          <Typography
+            sx={{
+              fontFamily: authFont,
+              fontSize: 10.5,
+              fontWeight: 800,
+              color: '#ff8624',
+            }}
+          >
+            XP BALANCE: {stats.currentXp} XP
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: authFont,
+              fontSize: 10.5,
+              fontWeight: 700,
+              color: '#8c8881',
+            }}
+          >
+            {percentLeft}% ({xpLeft} XP) to next level
+          </Typography>
+        </Box>
       </Box>
 
       <Box

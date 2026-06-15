@@ -72,9 +72,9 @@ export const validateBirthday = (birthday: string) => {
   if (!value) return 'Birthday is required.';
 
   const isoMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  const displayMatch = value.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+  const displayMatch = value.match(/^(\d{2})[-.](\d{2})[-.](\d{4})$/);
 
-  if (!isoMatch && !displayMatch) return 'Invalid date';
+  if (!isoMatch && !displayMatch) return 'Invalid date format.';
 
   const dayText = isoMatch ? isoMatch[3] : displayMatch?.[1];
   const monthText = isoMatch ? isoMatch[2] : displayMatch?.[2];
@@ -82,16 +82,30 @@ export const validateBirthday = (birthday: string) => {
   const day = Number(dayText);
   const month = Number(monthText);
   const year = Number(yearText);
+  
   const date = new Date(year, month - 1, day);
   const today = new Date();
 
   if (
     date.getFullYear() !== year ||
     date.getMonth() !== month - 1 ||
-    date.getDate() !== day ||
-    date > today
+    date.getDate() !== day
   ) {
-    return 'Invalid date';
+    return 'Invalid calendar date.';
+  }
+
+  if (date > today) {
+    return 'Date of birth cannot be in the future.';
+  }
+
+  const minAgeDate = new Date();
+  minAgeDate.setFullYear(today.getFullYear() - 18);
+  if (date > minAgeDate) {
+    return 'You must be at least 18 years old.';
+  }
+
+  if (year < 1900) {
+    return 'Date of birth cannot be before 1900.';
   }
 
   return '';

@@ -11,8 +11,9 @@ import {
 } from '@mui/icons-material';
 
 import { useAuth } from '../../store/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { getUser, uploadAvatar, UserProfile } from '../../api/userApi';
-import { getPet, feedPet, playWithPet, PetInfo } from '../../api/petApi';
+import { getPet, PetInfo } from '../../api/petApi';
 import { getUserHabits, completeHabit, UserHabit } from '../../api/habitsApi';
 
 import PetStatusCard from '../../components/dashboard/PetStatusCard';
@@ -28,6 +29,7 @@ const getAvatarUrl = (url?: string) => {
 
 const DashboardPage = () => {
   const { userId } = useAuth();
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [loading, setLoading] = useState(true);
@@ -76,40 +78,22 @@ const DashboardPage = () => {
     );
   }
 
-  const handleFeed = async () => {
+  const handleFeed = () => {
     if (!userId || !userProfile?.stats) return;
     if (userProfile.stats.currentXp < 10) {
       setToast({ message: 'You need at least 10 XP to feed your pet.', type: 'error' });
       return;
     }
-    setActionLoading('feed');
-    try {
-      await feedPet(userId);
-      setToast({ message: 'Your pet has been fed. Comfort +10, Hunger Reduced.', type: 'success' });
-      await fetchData();
-    } catch (error) {
-      setToast({ message: 'Failed to feed pet.', type: 'error' });
-    } finally {
-      setActionLoading(null);
-    }
+    navigate('/pet/action/feed');
   };
 
-  const handlePlay = async () => {
+  const handlePlay = () => {
     if (!userId || !userProfile?.stats) return;
     if (userProfile.stats.currentXp < 15) {
       setToast({ message: 'You need at least 15 XP to play with your pet.', type: 'error' });
       return;
     }
-    setActionLoading('play');
-    try {
-      await playWithPet(userId);
-      setToast({ message: 'You played with your pet. Happiness +20, Mood +15.', type: 'success' });
-      await fetchData();
-    } catch (error) {
-      setToast({ message: 'Failed to play with pet.', type: 'error' });
-    } finally {
-      setActionLoading(null);
-    }
+    navigate('/pet/action/play');
   };
 
   const handleCompleteHabit = async (habitId: number, title: string, note?: string) => {

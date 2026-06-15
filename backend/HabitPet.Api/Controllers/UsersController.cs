@@ -94,6 +94,36 @@ namespace HabitPet.Api.Controllers
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null) return NotFound();
 
+            if (string.IsNullOrWhiteSpace(request.FullName) || request.FullName.Trim().Length < 3 || request.FullName.Trim().Length > 25)
+            {
+                return BadRequest("Full Name must be between 3 and 25 characters.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Username) || request.Username.Trim().Length < 3 || request.Username.Trim().Length > 25)
+            {
+                return BadRequest("Username must be between 3 and 25 characters.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Email) || !request.Email.Contains("@"))
+            {
+                return BadRequest("A valid email address is required.");
+            }
+
+            if (request.Birthday > DateTime.Today)
+            {
+                return BadRequest("Date of birth cannot be in the future.");
+            }
+
+            if (request.Birthday > DateTime.Today.AddYears(-18))
+            {
+                return BadRequest("You must be at least 18 years old.");
+            }
+
+            if (request.Birthday.Year < 1900)
+            {
+                return BadRequest("Date of birth cannot be before 1900.");
+            }
+
             if (!string.Equals(user.Username, request.Username, StringComparison.OrdinalIgnoreCase))
             {
                 var existingUser = await _userRepository.GetByUsernameAsync(request.Username);

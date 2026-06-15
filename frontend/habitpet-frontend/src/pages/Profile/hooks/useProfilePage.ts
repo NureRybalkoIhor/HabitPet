@@ -58,7 +58,7 @@ export const useProfilePage = () => {
         setUsername(data.username);
         setEmail(data.email);
         setSex(data.sex || '');
-        setBirthday(data.birthday || '');
+        setBirthday(data.birthday ? data.birthday.substring(0, 10) : '');
       } catch {
         setToastType('error');
         setToastMessage('Failed to load user profile.');
@@ -103,7 +103,7 @@ export const useProfilePage = () => {
     const nextFullNameError = validatePersonName(fullName, 'Full Name');
     const nextUsernameError = validateUsername(username);
     const nextEmailError = validateEmail(email);
-    const nextBirthdayError = birthday ? validateBirthday(birthday) : '';
+    const nextBirthdayError = validateBirthday(birthday);
 
     setFullNameError(nextFullNameError);
     setUsernameError(nextUsernameError);
@@ -139,7 +139,13 @@ export const useProfilePage = () => {
     } catch (err: any) {
       setToastType('error');
       const apiError = err.response?.data || 'Failed to update profile.';
-      setToastMessage(typeof apiError === 'string' ? apiError : 'Failed to update profile.');
+      const errorMessage = typeof apiError === 'string' ? apiError : 'Failed to update profile.';
+      setToastMessage(errorMessage);
+      if (errorMessage.toLowerCase().includes('username')) {
+        setUsernameError(errorMessage);
+      } else if (errorMessage.toLowerCase().includes('email')) {
+        setEmailError(errorMessage);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -190,11 +196,28 @@ export const useProfilePage = () => {
     totalXpEarned: 0,
   };
 
-  const xpPercentage = Math.min(100, (stats.currentXp / stats.xpToNextLevel) * 100);
-  const xpLeft = stats.xpToNextLevel - stats.currentXp;
-  const percentLeft = stats.xpToNextLevel > 0 
-    ? Math.round((xpLeft / stats.xpToNextLevel) * 100) 
-    : 0;
+  const getLevelProgress = () => {
+    const currentLevel = stats.currentLevel;
+    const totalXpEarned = stats.totalXpEarned;
+    const xpStart = currentLevel > 1 ? Math.pow((currentLevel - 1) * 10, 2) : 0;
+    const xpEnd = Math.pow(currentLevel * 10, 2);
+    const range = xpEnd - xpStart;
+    const progressInLevel = totalXpEarned - xpStart;
+    const progressPercent = Math.min(100, Math.max(0, (progressInLevel / range) * 100));
+    const xpLeft = Math.max(0, xpEnd - totalXpEarned);
+    const percentLeft = Math.min(100, Math.max(0, (xpLeft / range) * 100));
+
+    return {
+      progress: progressPercent,
+      xpLeft,
+      percentLeft: Math.round(percentLeft),
+    };
+  };
+
+  const levelInfo = getLevelProgress();
+  const xpPercentage = levelInfo.progress;
+  const xpLeft = levelInfo.xpLeft;
+  const percentLeft = levelInfo.percentLeft;
 
   return {
     profile,

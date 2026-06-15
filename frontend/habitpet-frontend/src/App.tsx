@@ -7,6 +7,7 @@ import ResetPasswordSentPage from './pages/Auth/ResetPasswordSentPage';
 import DashboardPage from './pages/Dashboard/DashboardPage';
 import HabitsPage from './pages/Habits/HabitsPage';
 import PetPage from './pages/Pet/PetPage';
+import PetActionPage from './pages/Pet/PetActionPage';
 import AchievementsPage from './pages/Achievements/AchievementsPage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import SettingsPage from './pages/Settings/SettingsPage';
@@ -27,6 +28,7 @@ function App() {
         <Route path="/dashboard" element={<PrivateRoute><MainLayout><DashboardPage /></MainLayout></PrivateRoute>} />
         <Route path="/habits" element={<PrivateRoute><MainLayout><HabitsPage /></MainLayout></PrivateRoute>} />
         <Route path="/pet" element={<PrivateRoute><MainLayout><PetPage /></MainLayout></PrivateRoute>} />
+        <Route path="/pet/action/:type" element={<PrivateRoute><PetActionPage /></PrivateRoute>} />
         <Route path="/achievements" element={<PrivateRoute><MainLayout><AchievementsPage /></MainLayout></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><MainLayout><ProfilePage /></MainLayout></PrivateRoute>} />
         <Route path="/settings" element={<PrivateRoute><MainLayout><SettingsPage /></MainLayout></PrivateRoute>} />
